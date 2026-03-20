@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+dist/
+build/
+.env
+
+# Java
+target/
+*.class
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Misc
+.DS_Store
+*.log
