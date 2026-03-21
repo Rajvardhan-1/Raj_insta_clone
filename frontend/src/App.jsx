@@ -1,11 +1,12 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { MessageCircle, User } from 'lucide-react';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Messages from './pages/Messages';
-import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -28,14 +29,23 @@ function App() {
               element={
                 <ProtectedRoute>
                   <>
-                    <Navbar />
-                    <main className="main-content">
-                      <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/profile/:username" element={<Profile />} />
-                        <Route path="/messages" element={<Messages />} />
-                      </Routes>
-                    </main>
+                    <Sidebar />
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/profile/:username" element={<Profile />} />
+                      <Route path="/messages" element={<Messages />} />
+                    </Routes>
+                    <Link to="/messages" className="messages-fab">
+                      <div style={{ position: 'relative' }}>
+                        <MessageCircle size={24} color="white" />
+                        <span className="fab-badge">2</span>
+                      </div>
+                      <span>Messages</span>
+                      <div className="fab-avatars">
+                        <div className="fab-avatar"><User size={12} /></div>
+                        <div className="fab-avatar"><User size={12} /></div>
+                      </div>
+                    </Link>
                   </>
                 </ProtectedRoute>
               }

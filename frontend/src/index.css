@@ -73,16 +73,41 @@ body::after {
 }
 
 .app-container {
+  display: flex;
   min-height: 100vh;
+  width: 100%;
 }
 
 .main-content {
-  padding-top: 80px;
-  max-width: 600px;
-  margin: 0 auto;
-  padding-bottom: 40px;
-  position: relative;
-  z-index: 1;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 32px 0;
+  margin-left: 245px; /* Sidebar width */
+  transition: margin-left 0.3s;
+}
+
+@media (max-width: 1264px) {
+  .main-content {
+    margin-left: 72px; /* Slim sidebar */
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    margin-bottom: 50px; /* Mobile bottom nav space */
+    padding-top: 60px;
+  }
+}
+
+.feed-container {
+  max-width: 630px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .card {
@@ -171,47 +196,249 @@ body::after {
   src: url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
 }
 
-/* Navbar */
-.navbar {
+/* Sidebar */
+.sidebar {
+  width: 245px;
+  height: 100vh;
   position: fixed;
-  top: 0;
   left: 0;
-  right: 0;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border-bottom: 1px solid var(--glass-border);
+  top: 0;
+  border-right: 1px solid var(--glass-border);
+  padding: 8px 12px 20px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  z-index: 1000;
+  transition: width 0.3s;
+}
+
+.sidebar-logo {
+  padding: 25px 12px 35px;
+  display: block;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-link {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.7);
+  gap: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s;
+  font-size: 16px;
 }
 
-.logo {
-  font-family: 'Grand Hotel', cursive;
-  font-size: 3rem;
-  margin-bottom: 20px;
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(230, 104, 60, 0.3));
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
+.sidebar-link.active {
+  font-weight: 700;
+}
 
-.nav-icon {
+.sidebar-link span {
+  display: inline;
+}
+
+@media (max-width: 1264px) {
+  .sidebar {
+    width: 72px;
+  }
+  .sidebar-link span, .sidebar-logo h1 {
+    display: none;
+  }
+  .sidebar-logo {
+    padding: 25px 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: 50px;
+    top: auto;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid var(--glass-border);
+  }
+  .sidebar-logo { display: none; }
+  .sidebar-links {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+
+/* Stories */
+.stories-container {
+  display: flex;
+  gap: 12px;
+  padding: 16px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 24px;
+}
+
+.story-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 74px;
+  cursor: pointer;
+}
+
+.story-avatar-outer {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.story-avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg);
+  padding: 2px;
+}
+
+.story-avatar-inner img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.story-username {
+  font-size: 12px;
+  color: white;
+  max-width: 74px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Suggestions (Right Sidebar) */
+.suggestions-sidebar {
+  width: 320px;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 1160px) {
+  .suggestions-sidebar {
+    display: none;
+  }
+}
+
+.user-profile-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info .details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info .username {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-info .fullname {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.switch-link {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.suggestions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.suggestions-header span {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.see-all {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.follow-link {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Post Styling Update */
+.post-header {
+  justify-content: space-between;
+}
+
+.post-user-info {
+  display: flex;
+  align-items: center;
+}
+
+.post-options {
   cursor: pointer;
   color: white;
-  transition: all 0.3s;
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
 }
 
-.nav-icon:hover {
-  transform: scale(1.15);
-  color: var(--primary);
-  filter: drop-shadow(0 0 8px rgba(0, 149, 246, 0.5));
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.post-dot {
+  font-size: 18px;
 }
 
 /* Post Card */
