@@ -38,7 +38,7 @@ const Login = () => {
           <input
             className="input-field"
             type="text"
-            placeholder="Username"
+            placeholder="Username or Email"
             value={formData.username}
             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             required

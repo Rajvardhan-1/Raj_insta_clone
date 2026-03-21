@@ -42,11 +42,13 @@ public class AuthService {
         return response;
     }
 
-    public Map<String, String> login(String username, String password) {
+    public Map<String, String> login(String usernameOrEmail, String password) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(usernameOrEmail, password)
         );
-        var user = userRepository.findByUsername(username).orElseThrow();
+        var user = userRepository.findByUsername(usernameOrEmail)
+                .or(() -> userRepository.findByEmail(usernameOrEmail))
+                .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         Map<String, String> response = new HashMap<>();
         response.put("token", jwtToken);
