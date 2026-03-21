@@ -5,18 +5,27 @@ import api from '../services/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
       const response = await api.post('/auth/login', formData);
       login(response.data);
-      navigate('/');
+      setTimeout(() => navigate('/'), 100);
     } catch (err) {
-      setError('Invalid username or password');
+      console.error('Login error:', err);
+      if (!err.response) {
+        setError('Server is unreachable. Please ensure the backend is running.');
+      } else {
+        setError('Invalid username or password');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +50,14 @@ const Login = () => {
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
-          <button className="btn-primary" style={{ width: '100%' }} type="submit">Log In</button>
+          <button 
+            className="btn-primary" 
+            style={{ width: '100%' }} 
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Logging in...' : 'Log In'}
+          </button>
         </form>
         {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
       </div>

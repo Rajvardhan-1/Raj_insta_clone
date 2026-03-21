@@ -10,18 +10,28 @@ const Signup = () => {
     password: '', 
     fullName: '' 
   });
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
       const response = await api.post('/auth/register', formData);
       login(response.data);
-      navigate('/');
+      // Small timeout to ensure context state is updated before navigation
+      setTimeout(() => navigate('/'), 100);
     } catch (err) {
-      setError('Error creating account. Try a different username.');
+      console.error('Signup error:', err);
+      if (!err.response) {
+        setError('Server is unreachable. Please ensure the backend is running.');
+      } else {
+        setError(err.response.data?.message || 'Error creating account. Try a different username.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,7 +75,14 @@ const Signup = () => {
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
-          <button className="btn-primary" style={{ width: '100%' }} type="submit">Sign Up</button>
+          <button 
+            className="btn-primary" 
+            style={{ width: '100%' }} 
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Creating Account...' : 'Sign Up'}
+          </button>
         </form>
         {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
       </div>
