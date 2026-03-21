@@ -68,22 +68,38 @@ const Messages = () => {
 
   const [showNewChat, setShowNewChat] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const handleStartChat = async (e) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) return;
-    
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm.trim()) {
+        performSearch();
+      } else {
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  const performSearch = async () => {
+    setIsSearching(true);
     try {
-      // Find user and fetch chat history
-      const res = await api.get(`/messages/${searchTerm}`);
-      setSelectedUser({ username: searchTerm });
-      setMessages(res.data);
-      setShowNewChat(false);
-      setSearchTerm('');
-      fetchConversations();
+      const res = await api.get(`/users/search?query=${searchTerm}`);
+      setSearchResults(res.data);
     } catch (err) {
-      alert('User not found or error occurred');
+      console.error('Search error:', err);
+    } finally {
+      setIsSearching(false);
     }
+  };
+
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+    setShowNewChat(false);
+    setSearchTerm('');
+    setSearchResults([]);
   };
 
   return (
@@ -97,15 +113,43 @@ const Messages = () => {
         </div>
         {showNewChat && (
           <div className="new-chat-search">
-            <form onSubmit={handleStartChat}>
+            <div className="search-input-wrapper">
               <input 
                 type="text" 
-                placeholder="Search username..." 
+                placeholder="Search users..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 autoFocus
               />
-            </form>
+              {isSearching && <div className="search-loader"></div>}
+            </div>
+            {searchTerm.trim() && (
+              <div className="search-results-dropdown">
+                {searchResults.length > 0 ? (
+                  searchResults.map((u) => (
+                    <div 
+                      key={u.id} 
+                      className="search-result-item"
+                      onClick={() => handleSelectUser(u)}
+                    >
+                      <div className="avatar small">
+                        {u.profilePicture ? (
+                          <img src={u.profilePicture} alt={u.username} />
+                        ) : (
+                          <User size={20} />
+                        )}
+                      </div>
+                      <div className="user-details">
+                        <span className="username">{u.username}</span>
+                        <span className="fullname">{u.fullName}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  !isSearching && <div className="no-results">No users found</div>
+                )}
+              </div>
+            )}
           </div>
         )}
         <div className="conversations-list">
