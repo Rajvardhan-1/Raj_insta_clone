@@ -20,8 +20,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <Link to="/" className="sidebar-logo">
-        <h1 className="logo" style={{ fontSize: '2rem', margin: 0, textAlign: 'left' }}>Instagram</h1>
-        <Instagram className="nav-icon mobile-only" style={{ display: 'none' }} />
+        <Instagram size={28} color="white" className="nav-icon" />
       </Link>
 
       <div className="sidebar-links">
@@ -31,17 +30,37 @@ const Sidebar = () => {
             to={item.path} 
             className={`sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
             onClick={item.onClick}
+            title={item.label}
           >
-            {item.icon}
-            <span>{item.label}</span>
+            <div style={{ position: 'relative' }}>
+              {item.icon}
+              {item.label === 'Messages' && (
+                <span style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-5px',
+                  background: '#ff3040',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '18px',
+                  height: '18px',
+                  fontSize: '11px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  border: '2px solid var(--bg)'
+                }}>1</span>
+              )}
+            </div>
+            {/* labels are completely omitted for slim design */}
           </Link>
         ))}
       </div>
 
       <div style={{ marginTop: 'auto' }}>
-        <div className="sidebar-link" style={{ cursor: 'pointer' }}>
-          <Menu />
-          <span>More</span>
+        <div className="sidebar-link" style={{ cursor: 'pointer' }} title="More">
+          <Menu size={24} />
         </div>
       </div>
     </div>

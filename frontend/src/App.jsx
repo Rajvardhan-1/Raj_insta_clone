@@ -35,17 +35,6 @@ function App() {
                       <Route path="/profile/:username" element={<Profile />} />
                       <Route path="/messages" element={<Messages />} />
                     </Routes>
-                    <Link to="/messages" className="messages-fab">
-                      <div style={{ position: 'relative' }}>
-                        <MessageCircle size={24} color="white" />
-                        <span className="fab-badge">2</span>
-                      </div>
-                      <span>Messages</span>
-                      <div className="fab-avatars">
-                        <div className="fab-avatar"><User size={12} /></div>
-                        <div className="fab-avatar"><User size={12} /></div>
-                      </div>
-                    </Link>
                   </>
                 </ProtectedRoute>
               }

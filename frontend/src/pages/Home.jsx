@@ -87,14 +87,19 @@ const Home = () => {
           <div key={post.id} className="card post-card">
             <div className="post-header">
               <div className="post-user-info">
-                <div className="avatar" style={{ width: 32, height: 32 }}></div>
-                <div className="user-details" style={{ marginLeft: '12px' }}>
-                  <div className="post-meta">
-                    <span style={{ fontWeight: '600', color: 'white' }}>{post.user.username}</span>
-                    <span className="post-dot">•</span>
-                    <span>14h</span>
+                <div className="avatar" style={{ width: 32, height: 32 }}>
+                  <img src="https://i.pravatar.cc/150?img=53" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} alt="user" />
+                </div>
+                <div className="user-details" style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column' }}>
+                  <div className="post-meta" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ fontWeight: '700', color: 'white', fontSize: '14px' }}>{post.user.username}</span>
+                    <svg aria-label="Verified" color="rgb(0, 149, 246)" fill="currentColor" height="12" role="img" viewBox="0 0 40 40" width="12" style={{ marginLeft: '2px' }}>
+                      <path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"></path>
+                    </svg>
+                    <span className="post-dot" style={{ margin: '0 4px', fontSize: '12px', color: 'var(--text-secondary)' }}>•</span>
+                    <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>1h</span>
                   </div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Original audio</div>
+                  {/* Keeping empty details div just in case it's needed for alignment, but real IG often hides 'Original audio' in simple posts */}
                 </div>
               </div>
               <MoreHorizontal size={20} className="post-options" />
