@@ -1,0 +1,31 @@
+databases:
+  - name: insta-db
+    plan: free
+    databaseName: instadb
+    user: insta_user
+
+services:
+  - type: web
+    name: raj-insta-clone-backend
+    runtime: docker
+    repo: https://github.com/Rajvardhan-1/Raj_insta_clone.git
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: insta-db
+          property: connectionString
+      - key: DATABASE_USERNAME
+        fromDatabase:
+          name: insta-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: insta-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true

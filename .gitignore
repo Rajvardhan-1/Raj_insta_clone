@@ -14,6 +14,10 @@ target/
 *.swp
 *.swo
 
+# H2 Database
+*.mv.db
+*.trace.db
+
 # Misc
 .DS_Store
 *.log

@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {"http://localhost:5173", "https://raj-insta-clone.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:5173", "https://raj-insta-clone.vercel.app", "https://raj-insta-done-nqlggmum6-rajvardhan-1s-projects.vercel.app"})
 public class AuthController {
 
     private final AuthService authService;
@@ -20,7 +20,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
-        return ResponseEntity.ok(authService.register(user));
+        try {
+            return ResponseEntity.ok(authService.register(user));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PostMapping("/login")
